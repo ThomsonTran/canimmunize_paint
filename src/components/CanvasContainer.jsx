@@ -11,7 +11,7 @@ function CanvasContainer() {
   const [color, setColor] = useState("#ff0000");
   const [width, setWidth] = useState("500");
   const [height, setHeight] = useState("500");
-  const [tool, setTool] = useState(1);
+  const [tool, setTool] = useState(0);
   const [gridSize, setGridSize] = useState(100);
 
   const props = {
