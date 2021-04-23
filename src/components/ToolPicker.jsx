@@ -9,15 +9,11 @@ function ToolPicker(props) {
       onChange={(e) => props.onChange(e.target.value)}
     >
       {toolNames.map((element, index) => (
-        <div>
-          <input
-            key="{element}"
-            type="radio"
-            id={element}
-            name="tool"
-            value={index}
-          />
-          <label for={element}>{element}</label>
+        <div key={index}>
+          <input type="radio" id={element} name="tool" value={index} />
+          <label key={element} htmlFor={element}>
+            {element}
+          </label>
         </div>
       ))}
     </div>
