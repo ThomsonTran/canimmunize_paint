@@ -7,8 +7,6 @@ import ToolPicker from "./ToolPicker";
 
 import Canvas from "./canvas/Canvas";
 
-import "./canvasContainer.css";
-
 function CanvasContainer() {
   const [color, setColor] = useState("#ff0000");
   const [width, setWidth] = useState("500");
