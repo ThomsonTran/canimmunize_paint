@@ -11,6 +11,9 @@ const tools = [
 
   {
     name: "floodfill",
+    draw: (x, y, color, context, gridSize) => {
+      floodFill(x, y, color, context, gridSize);
+    },
   },
 ];
 

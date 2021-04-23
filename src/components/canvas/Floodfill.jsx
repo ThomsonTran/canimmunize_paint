@@ -1,0 +1,97 @@
+import pencilFill from "./Pencil";
+
+function getPixelColorInHex(x, y, context) {
+  return getHex(context.getImageData(x, y, 1, 1).data);
+}
+
+function getHex(pixelColor) {
+  return (
+    "#" +
+    ("000000" + rgbToHex(pixelColor[0], pixelColor[1], pixelColor[2])).slice(-6)
+  );
+}
+
+function rgbToHex(r, g, b) {
+  if (r > 255 || g > 255 || b > 255) {
+    return console.error("invalid rgb");
+  }
+  return ((r << 16) | (g << 8) | b).toString(16);
+}
+
+function getImageDataByGridsize(context, gridSize) {
+  const width = context.canvas.width;
+  const height = context.canvas.height;
+
+  let imageData = [];
+
+  for (let i = 1; i < width; i += gridSize) {
+    let row = [];
+    for (let j = 1; j < height; j += gridSize) {
+      row.push(getPixelColorInHex(i, j, context));
+    }
+    imageData.push(row);
+  }
+  return imageData;
+}
+
+export function floodFill(x, y, selectedColor, context, gridSize) {
+  const imageData = getImageDataByGridsize(context, gridSize);
+  const startCol = Math.floor(x / gridSize);
+  const startRow = Math.floor(y / gridSize);
+
+  const targetColor = imageData[startCol][startRow];
+
+  let visitedSquare = [];
+
+  if (targetColor !== selectedColor) {
+    const pixelStack = [startRow, startCol];
+
+    while (pixelStack.length > 0) {
+      const col = pixelStack.pop();
+      const row = pixelStack.pop();
+
+      if (!isWithinBounds(row, col, imageData)) {
+        continue;
+      }
+
+      const currentColor = imageData[col][row];
+
+      if (currentColor !== targetColor) {
+        continue;
+      }
+
+      if (!visitedSquare[row * imageData.length + col]) {
+        if (currentColor === targetColor) {
+          pencilFill(
+            col * gridSize,
+            row * gridSize,
+            selectedColor,
+            context,
+            gridSize
+          );
+
+          visitedSquare[row * imageData.length + col] = true;
+
+          pixelStack.push(row + 1, col);
+          pixelStack.push(row, col + 1);
+          pixelStack.push(row - 1, col);
+          pixelStack.push(row, col - 1);
+        }
+      }
+    }
+  }
+}
+
+function isWithinBounds(row, col, imageData) {
+  if (row < 0 || row > imageData.length - 1) {
+    return false;
+  }
+
+  if (col < 0 || col > imageData[0].length - 1) {
+    return false;
+  }
+
+  return true;
+}
+
+export default floodFill;
