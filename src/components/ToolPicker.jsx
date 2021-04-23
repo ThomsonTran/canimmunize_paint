@@ -11,9 +11,7 @@ function ToolPicker(props) {
       {toolNames.map((element, index) => (
         <div key={index}>
           <input type="radio" id={element} name="tool" value={index} />
-          <label key={element} htmlFor={element}>
-            {element}
-          </label>
+          <label htmlFor={element}>{element}</label>
         </div>
       ))}
     </div>

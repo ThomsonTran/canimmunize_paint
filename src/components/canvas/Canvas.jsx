@@ -112,7 +112,14 @@ const Canvas = (props) => {
     };
   }, [exitPaint]);
 
-  return <canvas ref={canvasRef} height={height} width={width} />;
+  return (
+    <canvas
+      className="canvasBackground"
+      ref={canvasRef}
+      height={height}
+      width={width}
+    />
+  );
 };
 
 export default Canvas;
