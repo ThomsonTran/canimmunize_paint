@@ -76,7 +76,8 @@ const Canvas = (props) => {
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
 
-      context.clearRect(0, 0, width, height);
+      context.fillStyle = "#FFFFFF";
+      context.fillRect(0, 0, width, height);
       context.beginPath();
       context.lineWidth = "1";
       context.strokeStyle = "blue";

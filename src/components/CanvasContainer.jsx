@@ -8,7 +8,7 @@ import ToolPicker from "./ToolPicker";
 import Canvas from "./canvas/Canvas";
 
 function CanvasContainer() {
-  const [color, setColor] = useState("#ff0000");
+  const [color, setColor] = useState("#000000");
   const [width, setWidth] = useState("500");
   const [height, setHeight] = useState("500");
   const [tool, setTool] = useState(0);
