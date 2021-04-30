@@ -37,7 +37,7 @@ const Canvas = (props) => {
     return () => {
       canvas.removeEventListener("mousedown", startPaint);
     };
-  }, [gridSize]);
+  }, []);
 
   const paint = useCallback(() => {
     if (isPainting) {
