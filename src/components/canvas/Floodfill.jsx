@@ -24,29 +24,31 @@ function startFill(
       continue;
     }
 
-    if (!visitedSquare[currentSquare]) {
-      if (currentColor === targetColor) {
-        pencilFill(
-          col * gridSize,
-          row * gridSize,
-          selectedColor,
-          context,
-          gridSize
-        );
+    if (visitedSquare[currentSquare]) {
+      continue;
+    }
 
-        visitedSquare[currentSquare] = true;
+    if (currentColor === targetColor) {
+      pencilFill(
+        col * gridSize,
+        row * gridSize,
+        selectedColor,
+        context,
+        gridSize
+      );
 
-        pixelStack.push(row + 1, col);
-        pixelStack.push(row, col + 1);
-        pixelStack.push(row - 1, col);
-        pixelStack.push(row, col - 1);
-      }
+      visitedSquare[currentSquare] = true;
+
+      pixelStack.push(row + 1, col);
+      pixelStack.push(row, col + 1);
+      pixelStack.push(row - 1, col);
+      pixelStack.push(row, col - 1);
     }
   }
 }
 
-function canFill(targetColor, selectedColor) {
-  return targetColor !== selectedColor;
+function canFill(color1, color2) {
+  return color1 !== color2;
 }
 
 function getPixelColorInHex(x, y, context) {
@@ -101,6 +103,7 @@ export function floodFill(x, y, selectedColor, context, gridSize) {
   const startRow = Math.floor(y / gridSize);
 
   const targetColor = imageData[startCol][startRow];
+
   if (canFill(targetColor, selectedColor)) {
     const pixelStack = [startRow, startCol];
 
