@@ -40,13 +40,14 @@ const Canvas = (props) => {
   }, []);
 
   const paint = useCallback(() => {
+    if (!canvasRef.current) {
+      return;
+    }
+
     if (isPainting) {
-      if (!canvasRef.current) {
-        return;
-      }
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
-      setMousePosition(mousePosition);
+
       Tools[tool].draw(
         mousePosition.x,
         mousePosition.y,
@@ -106,7 +107,6 @@ const Canvas = (props) => {
       return;
     }
     const canvas = canvasRef.current;
-
     canvas.addEventListener("mouseleave", exitPaint);
     return () => {
       canvas.removeEventListener("mouseleave", exitPaint);
