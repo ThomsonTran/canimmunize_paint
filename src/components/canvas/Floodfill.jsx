@@ -1,5 +1,54 @@
 import pencilFill from "./Pencil";
 
+function startFill(
+  pixelStack,
+  targetColor,
+  selectedColor,
+  gridSize,
+  imageData,
+  context
+) {
+  let visitedSquare = [];
+  while (pixelStack.length > 0) {
+    const col = pixelStack.pop();
+    const row = pixelStack.pop();
+    const currentSquare = row * imageData.length + col;
+
+    if (!isWithinBounds(row, col, imageData)) {
+      continue;
+    }
+
+    const currentColor = imageData[col][row];
+
+    if (currentColor !== targetColor) {
+      continue;
+    }
+
+    if (!visitedSquare[currentSquare]) {
+      if (currentColor === targetColor) {
+        pencilFill(
+          col * gridSize,
+          row * gridSize,
+          selectedColor,
+          context,
+          gridSize
+        );
+
+        visitedSquare[currentSquare] = true;
+
+        pixelStack.push(row + 1, col);
+        pixelStack.push(row, col + 1);
+        pixelStack.push(row - 1, col);
+        pixelStack.push(row, col - 1);
+      }
+    }
+  }
+}
+
+function canFill(targetColor, selectedColor) {
+  return targetColor !== selectedColor;
+}
+
 function getPixelColorInHex(x, y, context) {
   return getHex(context.getImageData(x, y, 1, 1).data);
 }
@@ -34,54 +83,6 @@ function getImageDataByGridsize(context, gridSize) {
   return imageData;
 }
 
-export function floodFill(x, y, selectedColor, context, gridSize) {
-  const imageData = getImageDataByGridsize(context, gridSize);
-  const startCol = Math.floor(x / gridSize);
-  const startRow = Math.floor(y / gridSize);
-
-  const targetColor = imageData[startCol][startRow];
-
-  let visitedSquare = [];
-
-  if (targetColor !== selectedColor) {
-    const pixelStack = [startRow, startCol];
-
-    while (pixelStack.length > 0) {
-      const col = pixelStack.pop();
-      const row = pixelStack.pop();
-
-      if (!isWithinBounds(row, col, imageData)) {
-        continue;
-      }
-
-      const currentColor = imageData[col][row];
-
-      if (currentColor !== targetColor) {
-        continue;
-      }
-
-      if (!visitedSquare[row * imageData.length + col]) {
-        if (currentColor === targetColor) {
-          pencilFill(
-            col * gridSize,
-            row * gridSize,
-            selectedColor,
-            context,
-            gridSize
-          );
-
-          visitedSquare[row * imageData.length + col] = true;
-
-          pixelStack.push(row + 1, col);
-          pixelStack.push(row, col + 1);
-          pixelStack.push(row - 1, col);
-          pixelStack.push(row, col - 1);
-        }
-      }
-    }
-  }
-}
-
 function isWithinBounds(row, col, imageData) {
   if (row < 0 || row > imageData.length - 1) {
     return false;
@@ -92,6 +93,26 @@ function isWithinBounds(row, col, imageData) {
   }
 
   return true;
+}
+
+export function floodFill(x, y, selectedColor, context, gridSize) {
+  const imageData = getImageDataByGridsize(context, gridSize);
+  const startCol = Math.floor(x / gridSize);
+  const startRow = Math.floor(y / gridSize);
+
+  const targetColor = imageData[startCol][startRow];
+  if (canFill(targetColor, selectedColor)) {
+    const pixelStack = [startRow, startCol];
+
+    startFill(
+      pixelStack,
+      targetColor,
+      selectedColor,
+      gridSize,
+      imageData,
+      context
+    );
+  }
 }
 
 export default floodFill;
