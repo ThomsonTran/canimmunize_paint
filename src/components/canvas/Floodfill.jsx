@@ -28,22 +28,20 @@ function startFill(
       continue;
     }
 
-    if (currentColor === targetColor) {
-      pencilFill(
-        col * gridSize,
-        row * gridSize,
-        selectedColor,
-        context,
-        gridSize
-      );
+    pencilFill(
+      col * gridSize,
+      row * gridSize,
+      selectedColor,
+      context,
+      gridSize
+    );
 
-      visitedSquare[currentSquare] = true;
+    visitedSquare[currentSquare] = true;
 
-      pixelStack.push(row + 1, col);
-      pixelStack.push(row, col + 1);
-      pixelStack.push(row - 1, col);
-      pixelStack.push(row, col - 1);
-    }
+    pixelStack.push(row + 1, col);
+    pixelStack.push(row, col + 1);
+    pixelStack.push(row - 1, col);
+    pixelStack.push(row, col - 1);
   }
 }
 
