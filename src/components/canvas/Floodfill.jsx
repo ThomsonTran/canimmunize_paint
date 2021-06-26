@@ -1,50 +1,5 @@
 import pencilFill from "./Pencil";
 
-function startFill(
-  pixelStack,
-  targetColor,
-  selectedColor,
-  gridSize,
-  imageData,
-  context
-) {
-  let visitedSquare = [];
-  while (pixelStack.length > 0) {
-    const col = pixelStack.pop();
-    const row = pixelStack.pop();
-    const currentSquare = row * imageData.length + col;
-
-    if (!isWithinBounds(row, col, imageData)) {
-      continue;
-    }
-
-    const currentColor = imageData[col][row];
-
-    if (currentColor !== targetColor) {
-      continue;
-    }
-
-    if (visitedSquare[currentSquare]) {
-      continue;
-    }
-
-    pencilFill(
-      col * gridSize,
-      row * gridSize,
-      selectedColor,
-      context,
-      gridSize
-    );
-
-    visitedSquare[currentSquare] = true;
-
-    pixelStack.push(row + 1, col);
-    pixelStack.push(row, col + 1);
-    pixelStack.push(row - 1, col);
-    pixelStack.push(row, col - 1);
-  }
-}
-
 function canFill(color1, color2) {
   return color1 !== color2;
 }
@@ -95,24 +50,50 @@ function isWithinBounds(row, col, imageData) {
   return true;
 }
 
-export function floodFill(x, y, selectedColor, context, gridSize) {
+export function floodFill(mousePosition, context, settings) {
+  const { gridSize, color: selectedColor } = settings;
+  const { x, y } = mousePosition;
   const imageData = getImageDataByGridsize(context, gridSize);
+
   const startCol = Math.floor(x / gridSize);
   const startRow = Math.floor(y / gridSize);
-
   const targetColor = imageData[startCol][startRow];
 
-  if (canFill(targetColor, selectedColor)) {
-    const pixelStack = [startRow, startCol];
+  if (!canFill(targetColor, selectedColor)) {
+    return;
+  }
 
-    startFill(
-      pixelStack,
-      targetColor,
-      selectedColor,
-      gridSize,
-      imageData,
-      context
-    );
+  const pixelStack = [startRow, startCol];
+
+  const visitedSquare = [];
+  while (pixelStack.length > 0) {
+    const col = pixelStack.pop();
+    const row = pixelStack.pop();
+    const currentSquare = row * imageData.length + col;
+
+    if (!isWithinBounds(row, col, imageData)) {
+      continue;
+    }
+
+    const currentColor = imageData[col][row];
+
+    if (currentColor !== targetColor) {
+      continue;
+    }
+
+    if (visitedSquare[currentSquare]) {
+      continue;
+    }
+
+    const squareToFill = { x: col * gridSize, y: row * gridSize };
+    pencilFill(squareToFill, context, settings);
+
+    visitedSquare[currentSquare] = true;
+
+    pixelStack.push(row + 1, col);
+    pixelStack.push(row, col + 1);
+    pixelStack.push(row - 1, col);
+    pixelStack.push(row, col - 1);
   }
 }
 

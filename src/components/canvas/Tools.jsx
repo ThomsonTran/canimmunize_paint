@@ -4,15 +4,15 @@ import pencil from "./Pencil.jsx";
 const tools = [
   {
     name: "pencil",
-    draw: (x, y, color, context, gridSize) => {
-      pencil(x, y, color, context, gridSize);
+    draw: (mousePosition, context, settings) => {
+      pencil(mousePosition, context, settings);
     },
   },
 
   {
     name: "floodfill",
-    draw: (x, y, color, context, gridSize) => {
-      floodFill(x, y, color, context, gridSize);
+    draw: (mousePosition, context, settings) => {
+      floodFill(mousePosition, context, settings);
     },
   },
 ];

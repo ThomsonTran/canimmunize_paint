@@ -1,4 +1,11 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
+import SettingsContext from "../SettingsContext";
 import Tools from "./Tools";
 
 const Canvas = (props) => {
@@ -6,11 +13,12 @@ const Canvas = (props) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const canvasRef = useRef(null);
-  const color = props.color;
+  const settings = useContext(SettingsContext);
+
   const width = props.width;
   const height = props.height;
-  const tool = props.tool;
-  const gridSize = props.gridSize;
+
+  const { gridSize } = useContext(SettingsContext);
 
   useEffect(() => {
     if (!canvasRef.current) {
@@ -48,15 +56,9 @@ const Canvas = (props) => {
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
 
-      Tools[tool].draw(
-        mousePosition.x,
-        mousePosition.y,
-        color,
-        context,
-        gridSize
-      );
+      Tools[settings.tool].draw(mousePosition, context, settings);
     }
-  }, [isPainting, mousePosition, color, tool, gridSize]);
+  }, [isPainting, mousePosition, settings]);
 
   useEffect(() => {
     if (!canvasRef.current) {

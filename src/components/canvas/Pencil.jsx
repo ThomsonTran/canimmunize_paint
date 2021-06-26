@@ -1,4 +1,7 @@
-export function pencilFill(x, y, color, context, gridSize) {
+export function pencilFill(mousePosition, context, settings) {
+  let { x, y } = mousePosition;
+  const { color, gridSize } = settings;
+
   context.strokeStyle = color;
   x = Math.floor(x / gridSize) * gridSize;
   y = Math.floor(y / gridSize) * gridSize;

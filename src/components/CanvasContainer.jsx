@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import ColorPicker from "./ColorPicker";
 import CanvasSizePicker from "./CanvasSizePicker";
@@ -6,6 +6,8 @@ import GridSizePicker from "./GridSizePicker";
 import ToolPicker from "./ToolPicker";
 
 import Canvas from "./canvas/Canvas";
+
+import SettingsContext from "./SettingsContext";
 
 function CanvasContainer() {
   const [color, setColor] = useState("#000000");
@@ -15,11 +17,9 @@ function CanvasContainer() {
   const [gridSize, setGridSize] = useState(100);
 
   const props = {
-    color: color,
-    width: width,
-    height: height,
-    tool: tool,
-    gridSize: gridSize,
+    color,
+    tool,
+    gridSize,
   };
 
   return (
@@ -30,7 +30,9 @@ function CanvasContainer() {
         <GridSizePicker setGridSize={setGridSize} />
         <ToolPicker onChange={(value) => setTool(value)} />
       </div>
-      <Canvas {...props} />
+      <SettingsContext.Provider value={props}>
+        <Canvas height={height} width={width} />
+      </SettingsContext.Provider>
     </div>
   );
 }
