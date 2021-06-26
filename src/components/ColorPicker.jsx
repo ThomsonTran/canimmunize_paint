@@ -1,7 +1,11 @@
-function ColorPicker(props) {
+function ColorPicker({ currentValue }, props) {
   return (
     <div className="color-picker-container">
-      <input type="color" onChange={(e) => props.onChange(e.target.value)} />
+      <input
+        type="color"
+        value={currentValue}
+        onChange={(e) => props.onChange(e.target.value)}
+      />
     </div>
   );
 }

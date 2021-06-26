@@ -1,23 +1,14 @@
-import React, { useRef } from "react";
+import React from "react";
 
-function GridSizePicker({ setGridSize }) {
-  const timeoutRef = useRef(null);
-
-  function waitThenSend(e) {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(
-      () => setGridSize(Math.max(e.target.value, 1)),
-      300
-    );
-  }
-
+function GridSizePicker({ setGridSize, currentValue }) {
   return (
     <div className="size-container">
       Grid Size
-      <input type="number" onChange={(e) => waitThenSend(e)} />
+      <input
+        type="number"
+        value={currentValue}
+        onChange={(e) => setGridSize(Math.max(e.target.value, 1))}
+      />
     </div>
   );
 }
